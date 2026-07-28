@@ -1,3 +1,10 @@
+"""
+Step 6: Given the (columns, rows) result of a query, decide the best
+chart type and render it with Plotly. No second LLM call — this is a
+plain heuristic based on the shape/types of the returned data, to save
+API usage and keep rendering instant.
+"""
+
 import plotly.graph_objects as go
 import plotly.express as px
 import pandas as pd
@@ -7,9 +14,9 @@ def _is_numeric(series: pd.Series) -> bool:
     return pd.api.types.is_numeric_dtype(series)
 
 
-def choose_chart_type(columns: list[str], rows: list[tuple]) -> str:
+def choose_chart_type(columns: list[str], rows: list[tuple], question: str = "") -> str:
     """
-    Returns one of: 'bar', 'line', 'metric', 'table'
+    Returns one of: 'bar', 'line', 'pie', 'metric', 'table'
     """
     if not rows:
         return "table"
@@ -22,6 +29,13 @@ def choose_chart_type(columns: list[str], rows: list[tuple]) -> str:
 
     numeric_cols = [c for c in columns if _is_numeric(df[c])]
     non_numeric_cols = [c for c in columns if c not in numeric_cols]
+
+    # Question explicitly asks for a pie chart or a "distribution" ->
+    # only valid if the shape is one categorical + one numeric column
+    question_lower = question.lower()
+    wants_pie = "pie" in question_lower or "distribution" in question_lower
+    if wants_pie and len(non_numeric_cols) == 1 and len(numeric_cols) == 1:
+        return "pie"
 
     # A 'year' column present + at least one numeric column -> time series
     if "year" in [c.lower() for c in columns] and numeric_cols:

@@ -3,7 +3,6 @@ import sqlite3
 
 DB_PATH = "movies.db"
 
-# Whitelist matching the real schema in prompt_template.py
 ALLOWED_TABLES = {"movies"}
 ALLOWED_COLUMNS = {
     "name", "rating", "genre", "year", "score", "votes",
@@ -11,7 +10,6 @@ ALLOWED_COLUMNS = {
     "gross", "company", "runtime"
 }
 
-# Any of these appearing as a standalone SQL keyword = reject immediately
 BANNED_KEYWORDS = {
     "INSERT", "UPDATE", "DELETE", "DROP", "ALTER", "CREATE",
     "TRUNCATE", "REPLACE", "ATTACH", "DETACH", "PRAGMA", "VACUUM"
