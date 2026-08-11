@@ -2,7 +2,7 @@ import { useState } from 'react'
 import Plot from 'react-plotly.js'
 
 // Change this once you deploy your backend (e.g. to your Render URL)
-const API_URL = 'http://127.0.0.1:8000/query'
+const API_URL = 'https://nl-dashboard.onrender.com/query'
 
 const EXAMPLE_QUESTIONS = [
   'top 5 highest rated action movies',
