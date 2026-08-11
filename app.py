@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 from pipeline import ask
 import pandas as pd
-from chart_builder import choose_chart_type, render_chart, render_chart_from_plan
+from chart_builder import render_chart_from_plan
 from chart_planner import plan_chart
 app = FastAPI(title="NL-to-Dashboard API")
 
