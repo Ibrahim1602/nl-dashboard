@@ -10,11 +10,11 @@ app = FastAPI(title="NL-to-Dashboard API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["https://your-app.vercel.app"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
+s
 
 class QueryRequest(BaseModel):
     question: str
