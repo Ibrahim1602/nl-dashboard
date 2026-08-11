@@ -1,11 +1,3 @@
-"""
-Step 2: Prompt template for natural-language-to-SQL generation.
-
-This module defines the schema description and few-shot examples that get
-injected into every LLM call. No RAG, no vector DB — the full schema is
-small enough to hardcode directly into the prompt every time.
-"""
-
 SCHEMA_DESCRIPTION = """
 Table: movies
 - name (TEXT): movie title
@@ -37,11 +29,11 @@ FEW_SHOT_EXAMPLES = [
     },
     {
         "question": "top 10 highest grossing movies released after 2010",
-        "sql": "SELECT name, gross, year FROM movies WHERE year > 2010 ORDER BY gross DESC LIMIT 10;"
+        "sql": "SELECT name, gross FROM movies WHERE year > 2010 ORDER BY gross DESC LIMIT 10;"
     },
     {
         "question": "movies directed by Christopher Nolan",
-        "sql": "SELECT name, year, score FROM movies WHERE director LIKE '%Nolan%' ORDER BY year;"
+        "sql": "SELECT name, score FROM movies WHERE director LIKE '%Nolan%' ORDER BY year;"
     },
     {
         "question": "action movies with a budget over 100 million and rating above 7",
@@ -81,12 +73,3 @@ Examples:
         {"role": "user", "content": user_question},
     ]
 
-
-# ---- Quick manual test (no API call yet — just prints the prompt) ----
-if __name__ == "__main__":
-    test_question = "which movies have the most votes"
-    messages = build_prompt(test_question)
-    print("=== SYSTEM PROMPT ===")
-    print(messages[0]["content"])
-    print("\n=== USER QUESTION ===")
-    print(messages[1]["content"])

@@ -69,26 +69,3 @@ def execute_sql(sql: str) -> tuple[list[str], list[tuple]]:
         return columns, rows
     finally:
         conn.close()
-
-
-# ---- Quick manual test ----
-if __name__ == "__main__":
-    test_cases = [
-        "SELECT name, votes FROM movies ORDER BY votes DESC LIMIT 5;",
-        "SELECT genre, AVG(runtime) AS avg_runtime FROM movies GROUP BY genre;",
-        "DELETE FROM movies WHERE genre = 'Action';",   # should be rejected
-        "SELECT * FROM users;",                          # should be rejected (unknown table)
-    ]
-
-    for sql in test_cases:
-        print(f"SQL: {sql}")
-        try:
-            columns, rows = execute_sql(sql)
-            print(f"  Columns: {columns}")
-            print(f"  Rows returned: {len(rows)}")
-            print(f"  Sample: {rows[:2]}")
-        except SQLValidationError as e:
-            print(f"  REJECTED: {e}")
-        except sqlite3.Error as e:
-            print(f"  DB ERROR: {e}")
-        print()

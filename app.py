@@ -3,12 +3,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from pipeline import ask
-from chart_builder import choose_chart_type, render_chart
-
+import pandas as pd
+from chart_builder import choose_chart_type, render_chart, render_chart_from_plan
+from chart_planner import plan_chart
 app = FastAPI(title="NL-to-Dashboard API")
 
-# Allow requests from any frontend for now (tighten this once you know
-# your actual deployed frontend URL, e.g. allow_origins=["https://yourapp.vercel.app"])
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -50,8 +49,14 @@ def query(request: QueryRequest):
     chart_json = None
 
     if result["error"] is None and result["rows"]:
-        chart_type = choose_chart_type(result["columns"], result["rows"])
-        fig = render_chart(result["columns"], result["rows"], request.question)
+        plan = plan_chart(request.question, result["columns"], result["rows"])
+        if plan is not None:
+            df = pd.DataFrame(result["rows"], columns=result["columns"])
+            chart_type = plan["chart_type"]
+            fig = render_chart_from_plan(df, plan)
+        else:
+            chart_type = "table"
+            fig = None
         if fig is not None:
             chart_json = fig.to_json()
 

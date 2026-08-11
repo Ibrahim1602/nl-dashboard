@@ -97,23 +97,3 @@ def ask(user_question: str, retry_on_failure: bool = True) -> dict:
                 "error": f"Failed after retry: {e2}",
             }
 
-
-# ---- Quick manual test ----
-if __name__ == "__main__":
-    test_questions = [
-        "top 5 highest budget horror movies",
-        "average budget by genre for movies after 2015",
-        "which director has the most movies in this dataset",
-    ]
-
-    for q in test_questions:
-        result = ask(q)
-        print(f"Q: {result['question']}")
-        print(f"SQL: {result['sql']}")
-        if result["error"]:
-            print(f"ERROR: {result['error']}")
-        else:
-            print(f"Columns: {result['columns']}")
-            print(f"Rows returned: {len(result['rows'])}")
-            print(f"Sample: {result['rows'][:3]}")
-        print()
