@@ -14,7 +14,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-s
 
 class QueryRequest(BaseModel):
     question: str
@@ -32,19 +31,16 @@ class QueryResponse(BaseModel):
 
 @app.get("/")
 def health_check():
-    """Simple endpoint to confirm the API is alive."""
-    return {"status": "ok", "message": "NL-to-Dashboard API is running"}
+     # this is to check if the API is active
+     return {"status": "ok", "message": "NL-to-Dashboard API is running"}
 
 
 @app.post("/query", response_model=QueryResponse)
 def query(request: QueryRequest):
-    """
-    Takes a plain-English question, runs it through the full pipeline,
-    and returns the SQL, raw results, and a ready-to-render chart (as
-    Plotly JSON) if applicable.
-    """
+    # this takes the question writtrn in english and returns SQL and the chart
     result = ask(request.question)
 
+    # so it will return as table if:
     chart_type = "table"
     chart_json = None
 
